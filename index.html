@@ -5,11 +5,13 @@
 </head>
 <body>
 	<h1>Hello World!</h1>
+	<div data-output></div>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		// Create a socket instance
-		var socket = new WebSocket('ws://192.168.0.17:5000');
+		var socket = new WebSocket('ws://wouter.local:5000');
+		var output = document.querySelector('[data-output]');
 
 		// Open the socket
 		socket.onopen = function(event) {
@@ -19,7 +21,14 @@
 
 		        switch(event.data) {
 		        	case 'blubje':
-		        		//dosomething
+		        		fetch('http://unitid.nl/dashboard/dashbot/hackaton.php')
+		        			.then(function(stream) {
+		        				return stream.json();
+		        			})
+		        			.then(function(data) {
+		        				console.log(data);
+		        				output.innerHTML = JSON.stringify(data);
+		        			})
 		        		break;
 		        }
 		    };
